@@ -22,8 +22,8 @@ A full-stack event management platform where users can register for events and a
 
 **Deployment**
 
-- Frontend: [Netlify](https://netlify.com) or [Vercel](https://vercel.com)
-- Backend: [Render](https://render.com)
+- Checkout this project [Here](https://college-event-hub.netlify.app/)
+
 
 ---
 
@@ -59,8 +59,8 @@ A full-stack event management platform where users can register for events and a
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/my-event-app.git
-cd my-event-app
+git clone 
+cd event management
 ```
 
 ### 2. Set Up the Backend
