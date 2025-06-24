@@ -9,18 +9,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import AdminProfile from "./pages/AdminProfile";
 import "./App.css";
 import Footer from "./components/Footer";
-import Loader from "./components/Loader";
-import { useEffect, useState } from "react";
 
 const App = () => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1000);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (loading) return <Loader />;
 
   return (
     <>
