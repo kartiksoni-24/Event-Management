@@ -138,8 +138,10 @@ const Register = () => {
               <option value="Mechanical">Mechanical</option>
               <option value="Civil">Civil</option>
               <option value="AI & DS">AI & DS</option>
-              <option value="Chemical">Chemical</option>
-              <option value="Production">Production</option>
+              <option value="Chemical">Mechatronic</option>
+              <option value="Production">
+                Industrial and Production Engineering
+              </option>
             </select>
             {errors.branch && (
               <p className="text-red-500 text-sm mt-1">{errors.branch}</p>

@@ -16,7 +16,6 @@ export const NotificationProvider = ({ children }) => {
     <NotificationContext.Provider value={{ showNotification }}>
       {children}
 
-      {/* Notification Toast */}
       {notification && (
         <div className="fixed top-15 right-4 z-50 animate-slide-in-out w-fit">
           <div className={`alert alert-${notification.type} shadow-lg`}>
@@ -31,7 +30,6 @@ export const NotificationProvider = ({ children }) => {
         </div>
       )}
 
-      {/* Animation via Tailwind utility classes (no config needed) */}
       <style>{`
         @keyframes slideInOut {
           0% { transform: translateX(150%); opacity: 0; }

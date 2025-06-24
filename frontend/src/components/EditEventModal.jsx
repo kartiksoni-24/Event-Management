@@ -7,7 +7,6 @@ const EditEventModal = ({ show, onClose, event, onUpdate, token }) => {
   const [errors, setErrors] = useState({});
   const { showNotification } = useNotify();
 
-
   useEffect(() => {
     if (event) setForm(event);
   }, [event]);
@@ -43,7 +42,6 @@ const EditEventModal = ({ show, onClose, event, onUpdate, token }) => {
       alert("Update failed");
     }
   };
-  
 
   if (!show) return null;
 
@@ -57,7 +55,6 @@ const EditEventModal = ({ show, onClose, event, onUpdate, token }) => {
           onSubmit={handleSubmit}
           className="grid grid-cols-1 md:grid-cols-2 gap-4"
         >
-          {/* Title */}
           <div>
             <input
               name="title"
@@ -73,7 +70,6 @@ const EditEventModal = ({ show, onClose, event, onUpdate, token }) => {
             )}
           </div>
 
-          {/* Location */}
           <div>
             <input
               name="location"
@@ -89,7 +85,6 @@ const EditEventModal = ({ show, onClose, event, onUpdate, token }) => {
             )}
           </div>
 
-          {/* Date */}
           <div>
             <input
               name="date"
@@ -105,7 +100,6 @@ const EditEventModal = ({ show, onClose, event, onUpdate, token }) => {
             )}
           </div>
 
-          {/* Time */}
           <div>
             <input
               name="time"
@@ -121,7 +115,6 @@ const EditEventModal = ({ show, onClose, event, onUpdate, token }) => {
             )}
           </div>
 
-          {/* Registration Limit */}
           <div className="md:col-span-2">
             <input
               name="registrationLimit"
@@ -138,7 +131,6 @@ const EditEventModal = ({ show, onClose, event, onUpdate, token }) => {
             )}
           </div>
 
-          {/* Description */}
           <div className="md:col-span-2">
             <textarea
               name="description"
@@ -155,7 +147,6 @@ const EditEventModal = ({ show, onClose, event, onUpdate, token }) => {
             )}
           </div>
 
-          {/* Buttons */}
           <div className="md:col-span-2 flex justify-end gap-2 mt-4">
             <button
               type="button"
