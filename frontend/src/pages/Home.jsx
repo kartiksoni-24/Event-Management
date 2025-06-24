@@ -4,6 +4,7 @@ import API from "../services/Api";
 import { useNavigate } from "react-router-dom";
 import EditEventModal from "../components/EditEventModal";
 import { useNotify } from "../context/NotificationContext";
+import { useLoader } from "../context/LoaderContext";
 
 const Home = () => {
   const { user } = useAuth();
@@ -12,10 +13,19 @@ const Home = () => {
   const [editingEvent, setEditingEvent] = useState(null);
   const navigate = useNavigate();
   const { showNotification } = useNotify();
+  const { setLoading } = useLoader();
 
   const fetchEvents = async () => {
-    const res = await API.get("/events");
-    setEvents(res.data);
+    try {
+      setLoading(true);
+      const res = await API.get("/events");
+      setEvents(res.data);
+    } catch (error) {
+      console.log(error);
+      showNotification("Failed to fetch events", "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {

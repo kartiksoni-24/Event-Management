@@ -4,6 +4,7 @@ import API from "../services/Api";
 import EditEventModal from "../components/EditEventModal";
 import { useNotify } from "../context/NotificationContext";
 import DeleteConfirmModal from "../components/DeleteConfirmModal";
+import { useLoader } from "../context/LoaderContext";
 
 const AdminProfile = () => {
   const { user } = useAuth();
@@ -13,12 +14,19 @@ const AdminProfile = () => {
   const { showNotification } = useNotify();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-
+  const { setLoading } = useLoader();
 
   const fetchEvents = async () => {
-    const res = await API.get("/events");
-    const created = res.data.filter((e) => e.createdBy === user._id);
-    setEvents(created);
+    try {
+      setLoading(true);
+      const res = await API.get("/events");
+      const created = res.data.filter((e) => e.createdBy === user._id);
+      setEvents(created);
+    } catch (error) {
+      showNotification("Failed to fetch events", "error");
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -42,7 +50,6 @@ const AdminProfile = () => {
     }
     setShowDeleteModal(false);
   };
-  
 
   return (
     <div className=" mx-5 px-4 py-8">

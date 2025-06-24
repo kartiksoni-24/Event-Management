@@ -2,22 +2,27 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import API from "../services/Api";
 import { useNotify } from "../context/NotificationContext";
+import { useLoader } from "../context/LoaderContext";
 
 const Profile = () => {
   const { user } = useAuth();
   const [events, setEvents] = useState([]);
   const { showNotification } = useNotify();
+  const { setLoading } = useLoader();
 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
+        setLoading(true);
         const res = await API.get("/events");
         const registered = res.data.filter((event) =>
           event.registeredUsers.includes(user._id)
         );
         setEvents(registered);
       } catch (err) {
-        console.error(err);
+        showNotification("Failed to fetch events", "error");
+      } finally {
+        setLoading(false);
       }
     };
     fetchEvents();

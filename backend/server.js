@@ -11,6 +11,7 @@ connectDB();
 const app = express();
 app.use(
   cors({
+    // origin: " http://localhost:5173",
     origin: "https://college-event-hub.netlify.app",
     credentials: true,
   })
