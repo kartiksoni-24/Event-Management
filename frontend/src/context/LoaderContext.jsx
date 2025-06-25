@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import Loader from "../components/Loader";
 
 const LoaderContext = createContext();
@@ -7,6 +7,10 @@ export const useLoader = () => useContext(LoaderContext);
 
 export const LoaderProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    document.body.style.overflow = loading ? "hidden" : "auto";
+  }, [loading]);
 
   return (
     <LoaderContext.Provider value={{ loading, setLoading }}>

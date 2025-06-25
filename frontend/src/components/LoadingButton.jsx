@@ -6,7 +6,7 @@ const LoadingButton = ({ isLoading, children, className = "", ...rest }) => {
       {...rest}
     >
       {isLoading ? (
-        <span className="loading loading-ball loading-sm"></span>
+        <span className="loading loading-ring loading-sm"></span>
       ) : (
         children
       )}
