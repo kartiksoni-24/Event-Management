@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useNotify } from "../context/NotificationContext";
 import API from "../services/Api";
+import LoadingButton from "../components/LoadingButton";
 
 const Register = () => {
   const [form, setForm] = useState({
@@ -13,6 +14,7 @@ const Register = () => {
     branch: "",
   });
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const { showNotification } = useNotify();
   const navigate = useNavigate();
@@ -39,7 +41,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-
+    setLoading(true);
     try {
       const res = await API.post("/auth/register", form);
       login(res.data);
@@ -50,6 +52,8 @@ const Register = () => {
         err.response?.data?.message || "Registration failed",
         "error"
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -148,9 +152,13 @@ const Register = () => {
             )}
           </div>
 
-          <button className="btn btn-primary w-full hover:scale-105 transition">
+          <LoadingButton
+            isLoading={loading}
+            type="submit"
+            className="w-full hover:scale-105 transition  btn-primary"
+          >
             Register
-          </button>
+          </LoadingButton>
         </form>
 
         <p className="mt-4 text-sm text-center">

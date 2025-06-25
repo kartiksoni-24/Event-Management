@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import EditEventModal from "../components/EditEventModal";
 import { useNotify } from "../context/NotificationContext";
 import { useLoader } from "../context/LoaderContext";
+import LoadingButton from "../components/LoadingButton";
 
 const Home = () => {
   const { user } = useAuth();
@@ -14,6 +15,7 @@ const Home = () => {
   const navigate = useNavigate();
   const { showNotification } = useNotify();
   const { setLoading } = useLoader();
+  const [loadingId, setLoadingId] = useState(null);
 
   const fetchEvents = async () => {
     try {
@@ -34,6 +36,7 @@ const Home = () => {
 
   const handleRegister = async (id) => {
     if (!user) return navigate("/login");
+    setLoadingId(id);
     try {
       await API.post(
         `/events/register/${id}`,
@@ -49,10 +52,13 @@ const Home = () => {
         err.response?.data?.message || "Registration failed",
         "error"
       );
+    } finally {
+      setLoadingId(null);
     }
   };
 
   const handleUnregister = async (id) => {
+    setLoadingId(id);
     try {
       await API.post(
         `/events/unregister/${id}`,
@@ -64,7 +70,9 @@ const Home = () => {
       showNotification("Unregistered from event", "info");
       fetchEvents();
     } catch (err) {
-      alert("Unregister failed");
+      showNotification("Unregister failed", error);
+    } finally {
+      setLoadingId(null);
     }
   };
 
@@ -97,7 +105,8 @@ const Home = () => {
                       Admin View
                     </p>
                   ) : (
-                    <button
+                    <LoadingButton
+                      isLoading={loadingId === e._id}
                       className={`btn btn-sm ${
                         isRegistered ? "btn-outline btn-warning" : "btn-success"
                       }`}
@@ -108,7 +117,7 @@ const Home = () => {
                       }
                     >
                       {isRegistered ? "Unregister" : "Register"}
-                    </button>
+                    </LoadingButton>
                   )}
                 </div>
               </div>

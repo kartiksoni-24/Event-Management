@@ -85,7 +85,7 @@ const AdminProfile = () => {
                 </button>
                 <button
                   onClick={() => confirmDelete(e._id)}
-                  className="btn btn-sm btn-error hover:scale-105 transition"
+                  className="btn btn-sm btn-error hover:scale-105 hover:animate-pulse transition"
                 >
                   Delete
                 </button>

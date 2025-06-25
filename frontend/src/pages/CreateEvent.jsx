@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import API from "../services/Api";
 import { useAuth } from "../context/AuthContext";
 import { useNotify } from "../context/NotificationContext";
+import LoadingButton from "../components/LoadingButton";
 
 const CreateEvent = () => {
   const [form, setForm] = useState({
@@ -14,6 +15,7 @@ const CreateEvent = () => {
     registrationLimit: "",
   });
   const [errors, setErrors] = useState({});
+  const [creating, setCreating] = useState(false);
   const { user } = useAuth();
   const navigate = useNavigate();
   const { showNotification } = useNotify();
@@ -39,7 +41,7 @@ const CreateEvent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-
+    setCreating(true);
     try {
       await API.post("/events", form, {
         headers: { Authorization: `Bearer ${user.token}` },
@@ -48,6 +50,8 @@ const CreateEvent = () => {
       navigate("/");
     } catch (err) {
       alert(err.response?.data?.message || "Error");
+    } finally {
+      setCreating(false);
     }
   };
 
@@ -80,7 +84,6 @@ const CreateEvent = () => {
                 </div>
               )
             )}
-
             <div className="md:col-span-2">
               <textarea
                 name="description"
@@ -97,12 +100,13 @@ const CreateEvent = () => {
               )}
             </div>
 
-            <button
+            <LoadingButton
+              isLoading={creating}
               type="submit"
-              className="btn btn-primary w-full md:col-span-2 hover:scale-105 transition"
+              className="w-full md:col-span-2  btn-primary hover:scale-105 transition "
             >
               Create Event
-            </button>
+            </LoadingButton>
           </form>
         </div>
       </div>

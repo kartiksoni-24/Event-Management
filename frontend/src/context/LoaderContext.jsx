@@ -10,7 +10,13 @@ export const LoaderProvider = ({ children }) => {
 
   return (
     <LoaderContext.Provider value={{ loading, setLoading }}>
-      {loading && <Loader />}
+      {/* {loading && <Loader />} */}
+      {loading && (
+        <div className="fixed inset-0 bg-base-100 bg-opacity-90 z-[100] flex items-center justify-center overflow-hidden">
+          <Loader />
+        </div>
+      )}
+
       {children}
     </LoaderContext.Provider>
   );

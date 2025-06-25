@@ -11,7 +11,7 @@ const DeleteConfirmModal = ({ open, onCancel, onConfirm }) => {
           <button onClick={onCancel} className="btn btn-outline">
             Cancel
           </button>
-          <button onClick={onConfirm} className="btn btn-error">
+          <button onClick={onConfirm} className="btn btn-error animate-pulse">
             Delete
           </button>
         </div>

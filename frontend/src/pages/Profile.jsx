@@ -3,12 +3,14 @@ import { useAuth } from "../context/AuthContext";
 import API from "../services/Api";
 import { useNotify } from "../context/NotificationContext";
 import { useLoader } from "../context/LoaderContext";
+import LoadingButton from "../components/LoadingButton";
 
 const Profile = () => {
   const { user } = useAuth();
   const [events, setEvents] = useState([]);
   const { showNotification } = useNotify();
   const { setLoading } = useLoader();
+  const [loadingId, setLoadingId] = useState(null);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -29,6 +31,7 @@ const Profile = () => {
   }, [user]);
 
   const handleUnregister = async (id) => {
+    setLoadingId(id);
     try {
       await API.post(
         `/events/unregister/${id}`,
@@ -45,6 +48,8 @@ const Profile = () => {
       setEvents(registered);
     } catch (err) {
       alert(err.response?.data?.message || "Error");
+    } finally {
+      setLoadingId(null);
     }
   };
 
@@ -67,12 +72,13 @@ const Profile = () => {
                 {new Date(event.date).toLocaleDateString()} • {event.time}
               </p>
               <div className="card-actions justify-end mt-4">
-                <button
-                  className="btn btn-sm btn-error animate-pulse hover:scale-105 transition"
+                <LoadingButton
+                  isLoading={loadingId === event._id}
+                  className="btn btn-sm btn-error hover:animate-pulse hover:scale-105 transition"
                   onClick={() => handleUnregister(event._id)}
                 >
                   Unregister
-                </button>
+                </LoadingButton>
               </div>
             </div>
           </div>

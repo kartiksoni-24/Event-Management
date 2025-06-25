@@ -3,17 +3,18 @@ import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import API from "../services/Api";
 import { useNotify } from "../context/NotificationContext";
-
-
+import LoadingButton from "../components/LoadingButton";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
   const { showNotification } = useNotify();
 
+  
   const validate = () => {
     const newErrors = {};
     if (!email) newErrors.email = "Email is required";
@@ -31,7 +32,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
-
+    setLoading(true);
     try {
       const res = await API.post("/auth/login", { email, password });
       login(res.data);
@@ -41,6 +42,8 @@ const Login = () => {
     } catch (err) {
       const message = err.response?.data?.message || "Invalid credentials";
       showNotification(message, "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -81,9 +84,11 @@ const Login = () => {
             )}
           </div>
 
-          <button className="btn btn-primary w-full hover:scale-105 transition">
+          <LoadingButton isLoading={loading} type="submit" className=" btn-primary w-full hover:scale-105 transition">
             Login
-          </button>
+          </LoadingButton>
+
+          
         </form>
         <p className="mt-4 text-sm text-center">
           Don&apos;t have an account?{" "}
