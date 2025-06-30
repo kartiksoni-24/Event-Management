@@ -13,7 +13,7 @@ const createEvent = async (req, res) => {
   try {
     const newEvent = new Event({
       ...req.body,
-      createdBy: req.user._id, 
+      createdBy: req.user._id,
     });
 
     const savedEvent = await newEvent.save();
@@ -22,7 +22,6 @@ const createEvent = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
-
 
 const updateEvent = async (req, res) => {
   try {
@@ -68,10 +67,25 @@ const registerForEvent = async (req, res) => {
   }
 };
 
+const getRegisteredUsers = async (req, res) => {
+  try {
+    const event = await Event.findById(req.params.id).populate(
+      "registeredUsers",
+      "name email branch rollNumber"
+    );
+    // console.log(event);
+    if (!event) return res.status(404).json({ message: "Event not found" });
+    res.status(200).json(event.registeredUsers);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch registered users" });
+  }
+};
+
 module.exports = {
   getEvents,
   createEvent,
   updateEvent,
   deleteEvent,
   registerForEvent,
+  getRegisteredUsers,
 };

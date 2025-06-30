@@ -15,6 +15,10 @@ const AdminProfile = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
   const { setLoading } = useLoader();
+  const [studentsModalOpen, setStudentsModalOpen] = useState(false);
+  const [registeredStudents, setRegisteredStudents] = useState([]);
+  const [selectedEventId, setSelectedEventId] = useState(null);
+  const [sloading, setsLoading] = useState(false);
 
   const fetchEvents = async () => {
     try {
@@ -51,6 +55,24 @@ const AdminProfile = () => {
     setShowDeleteModal(false);
   };
 
+  const openStudentsModal = async (eventId) => {
+    try {
+      setsLoading(true);
+      setSelectedEventId(eventId);
+      const res = await API.get(`/events/${eventId}/registered-users`, {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+      setRegisteredStudents(res.data);
+      setStudentsModalOpen(true);
+    } catch (err) {
+      showNotification("Could not load students", "error");
+    } finally {
+      setsLoading(false);
+    }
+  };
+
   return (
     <div className=" mx-5 px-4 py-8">
       <h2 className="text-3xl font-bold mb-6 text-center">
@@ -75,6 +97,13 @@ const AdminProfile = () => {
 
               <div className="card-actions justify-end mt-4">
                 <button
+                  className="btn btn-sm btn-info"
+                  onClick={() => openStudentsModal(e._id)}
+                >
+                  Registered Students
+                </button>
+
+                <button
                   onClick={() => {
                     setEditingEvent(e);
                     setShowModal(true);
@@ -94,6 +123,52 @@ const AdminProfile = () => {
           </div>
         ))}
       </div>
+
+      {studentsModalOpen && (
+        <div className="modal modal-open">
+          <div className="modal-box max-w-2xl">
+            <h3 className="font-bold text-lg mb-4">Registered Students</h3>
+
+            {sloading ? (
+              <p>Loading...</p>
+            ) : registeredStudents.length === 0 ? (
+              <p>No students registered yet.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="table table-zebra">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Branch</th>
+                      <th>Roll No</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {registeredStudents.map((user) => (
+                      <tr key={user._id}>
+                        <td>{user.name}</td>
+                        <td>{user.email}</td>
+                        <td>{user.branch}</td>
+                        <td>{user.rollNumber}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            <div className="modal-action">
+              <button
+                className="btn"
+                onClick={() => setStudentsModalOpen(false)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <EditEventModal
         show={showModal}

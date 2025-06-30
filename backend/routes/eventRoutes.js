@@ -6,6 +6,7 @@ const {
   updateEvent,
   deleteEvent,
   registerForEvent,
+  getRegisteredUsers
 } = require("../controllers/eventController");
 const Event = require("../models/Event");
 
@@ -34,6 +35,8 @@ router.post("/unregister/:id", protect, async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
+
+router.get("/:id/registered-users", protect, adminOnly, getRegisteredUsers);
 
 
 module.exports = router;
