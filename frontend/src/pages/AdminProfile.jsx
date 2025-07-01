@@ -5,6 +5,7 @@ import EditEventModal from "../components/EditEventModal";
 import { useNotify } from "../context/NotificationContext";
 import DeleteConfirmModal from "../components/DeleteConfirmModal";
 import { useLoader } from "../context/LoaderContext";
+import LoadingButton from "../components/LoadingButton";
 
 const AdminProfile = () => {
   const { user } = useAuth();
@@ -18,7 +19,7 @@ const AdminProfile = () => {
   const [studentsModalOpen, setStudentsModalOpen] = useState(false);
   const [registeredStudents, setRegisteredStudents] = useState([]);
   const [selectedEventId, setSelectedEventId] = useState(null);
-  const [sloading, setsLoading] = useState(false);
+  const [sloading, setsLoading] = useState(null);
 
   const fetchEvents = async () => {
     try {
@@ -57,7 +58,7 @@ const AdminProfile = () => {
 
   const openStudentsModal = async (eventId) => {
     try {
-      setsLoading(true);
+      setsLoading(eventId);
       setSelectedEventId(eventId);
       const res = await API.get(`/events/${eventId}/registered-users`, {
         headers: {
@@ -69,7 +70,7 @@ const AdminProfile = () => {
     } catch (err) {
       showNotification("Could not load students", "error");
     } finally {
-      setsLoading(false);
+      setsLoading(null);
     }
   };
 
@@ -96,12 +97,20 @@ const AdminProfile = () => {
               </p>
 
               <div className="card-actions justify-end mt-4">
-                <button
+                {/* <button
                   className="btn btn-sm btn-info"
                   onClick={() => openStudentsModal(e._id)}
                 >
                   Students
-                </button>
+                </button> */}
+
+                <LoadingButton
+                  isLoading={sloading === e._id}
+                  onClick={() => openStudentsModal(e._id)}
+                  className="btn-sm btn-info hover:scale-105 transition"
+                >
+                  Students
+                </LoadingButton>
 
                 <button
                   onClick={() => {
