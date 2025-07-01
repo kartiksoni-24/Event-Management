@@ -74,7 +74,7 @@ const AdminProfile = () => {
   };
 
   return (
-    <div className=" mx-5 px-4 py-8">
+    <div className=" px-4 py-8">
       <h2 className="text-3xl font-bold mb-6 text-center">
         Your Created Events
       </h2>
@@ -100,7 +100,7 @@ const AdminProfile = () => {
                   className="btn btn-sm btn-info"
                   onClick={() => openStudentsModal(e._id)}
                 >
-                  Registered Students
+                  Students
                 </button>
 
                 <button
